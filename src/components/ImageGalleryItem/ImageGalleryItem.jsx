@@ -1,8 +1,8 @@
+import { Button } from 'components/Button/Button';
 import { Component } from 'react';
-import css from './ ImageGalleryItem.module.css';
+import css from './ImageGalleryItem.module.css';
 
 export class ImageGalleryItem extends Component {
-  state = {};
   render() {
     return (
       <li className={css.imageGalleryItem} key={this.props.image.id}>
