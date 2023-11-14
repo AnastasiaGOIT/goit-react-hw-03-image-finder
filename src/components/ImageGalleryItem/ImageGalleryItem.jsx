@@ -5,12 +5,10 @@ export class ImageGalleryItem extends Component {
   state = {};
   render() {
     return (
-      <li className={css.imageGalleryItem} key={this.props.image.key}>
+      <li className={css.imageGalleryItem} key={this.props.image.id}>
         <img
-          width={40}
-          height={40}
           className={css.imageGalleryItemImage}
-          src={this.props.image.item}
+          src={this.props.image.webformatURL}
           alt=""
         />
       </li>
