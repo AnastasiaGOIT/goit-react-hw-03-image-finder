@@ -6,8 +6,9 @@ import { Button } from './Button/Button';
 
 export class App extends Component {
   state = {
+    page: 1,
     value: '',
-    image: '',
+    image: [],
     loading: false,
     error: null,
   };
@@ -26,6 +27,25 @@ export class App extends Component {
   }
   handleSearchFormSubmit = value => {
     this.setState({ value });
+  };
+
+  onLoadMore = image => {
+    this.setState({ loading: true, image: null });
+    const { page } = this.state;
+    const { value } = this.props;
+    fetch(
+      `https://pixabay.com/api/?q=${value}&page=${
+        page + 1
+      }&key=39787944-43ec837227cb503858330c56a&image_type=photo&orientation=horizontal&per_page=12`
+    )
+      .then(res => res.json())
+      .then(data => {
+        this.setState(prevState => ({
+          page: prevState.page + 1,
+          image: [...prevState.image, data.hits],
+        }));
+      })
+      .catch(error => this.setState({ error }));
   };
 
   render() {
@@ -55,7 +75,7 @@ export class App extends Component {
           />
         )}
         <ImageGallery value={this.state.value} image={this.state.image} />
-        {this.state.image && <Button />}
+        {this.state.image && <Button onLoadMore={this.onLoadMore} />}
         {/* if (this.state.image.hits.length === 12) */}
       </div>
     );
