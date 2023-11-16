@@ -6,12 +6,9 @@ export class ImageGallery extends Component {
   render() {
     return (
       <ul className={css.image_gallery}>
-        {this.props.image &&
-          this.props.image.hits &&
-          this.props.image.hits.length > 0 &&
-          this.props.image.hits.map(item => (
-            <ImageGalleryItem key={item.id} image={item} />
-          ))}
+        {this.props.image.map(item => (
+          <ImageGalleryItem key={item.id} image={item} />
+        ))}
       </ul>
     );
   }

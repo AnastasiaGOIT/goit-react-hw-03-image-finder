@@ -4,12 +4,13 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Audio } from 'react-loader-spinner';
 import { Button } from './Button/Button';
 import { api } from './services/api';
+import { Modal } from './Modal/Modal';
 
 export class App extends Component {
   state = {
     page: 1,
     value: '',
-    image: '',
+    image: [],
     loading: false,
     error: null,
   };
@@ -74,6 +75,7 @@ export class App extends Component {
         <ImageGallery value={this.state.value} image={this.state.image} />
         {this.state.image && <Button onLoadMore={this.onLoadMore} />}
         {/* if (this.state.image.hits.length === 12) */}
+        {/* <Modal image={this.state.image} /> */}
       </div>
     );
   }
