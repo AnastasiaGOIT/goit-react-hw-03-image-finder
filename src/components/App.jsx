@@ -3,24 +3,29 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Audio } from 'react-loader-spinner';
 import { Button } from './Button/Button';
+import { api } from './services/api';
 
 export class App extends Component {
   state = {
     page: 1,
     value: '',
-    image: [],
+    image: '',
     loading: false,
     error: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.value !== this.state.value && !this.state.loading) {
-      this.setState({ loading: true, image: null });
-      fetch(
-        `https://pixabay.com/api/?q=${this.state.value}&page=1&key=39787944-43ec837227cb503858330c56a&image_type=photo&orientation=horizontal&per_page=12`
-      )
-        .then(res => res.json())
-        .then(image => this.setState({ image }))
+    const { value, page, image } = this.state;
+
+    if (prevState.value !== value || prevState.page !== page) {
+      this.setState({ loading: true, image: [] });
+      api(value, page)
+        .then(data => {
+          console.log(data);
+          this.setState(prevState => ({
+            image: [...prevState.image, ...data.hits],
+          }));
+        })
         .catch(error => this.setState({ error }))
         .finally(() => this.setState({ loading: false }));
     }
@@ -29,25 +34,17 @@ export class App extends Component {
     this.setState({ value });
   };
 
-  onLoadMore = image => {
-    this.setState({ loading: true, image: null });
-    const { page } = this.state;
-    const { value } = this.props;
-    fetch(
-      `https://pixabay.com/api/?q=${value}&page=${
-        page + 1
-      }&key=39787944-43ec837227cb503858330c56a&image_type=photo&orientation=horizontal&per_page=12`
-    )
-      .then(res => res.json())
-      .then(data => {
-        this.setState(prevState => ({
-          page: prevState.page + 1,
-          image: [...prevState.image, data.hits],
-        }));
-      })
-      .catch(error => this.setState({ error }));
+  onLoadMore = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
   };
-
+  // loadEnd = () => {
+  //   this.steState(prev => ({
+  //     image: [...prev.image, ...hits],
+  //     loading: this.state.page < Math.ceil(totalHits / 12),
+  //   }));
+  // };
   render() {
     return (
       <div
