@@ -70,7 +70,7 @@ export class App extends Component {
         }}
       >
         <Searchbar onSubmit={this.handleSearchFormSubmit} />
-
+        {/* {error && <h1>{ }</h1>} */}
         {this.state.loading && <Audio />}
         <ImageGallery
           openModal={this.openModal}
