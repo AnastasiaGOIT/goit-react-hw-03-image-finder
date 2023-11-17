@@ -1,5 +1,3 @@
-import { Button } from 'components/Button/Button';
-import { Modal } from 'components/Modal/Modal';
 import { Component } from 'react';
 import css from './ImageGalleryItem.module.css';
 
