@@ -7,7 +7,11 @@ export class ImageGallery extends Component {
     return (
       <ul className={css.image_gallery}>
         {this.props.image.map(item => (
-          <ImageGalleryItem key={item.id} image={item} />
+          <ImageGalleryItem
+            key={item.id}
+            image={item}
+            openModal={this.props.openModal}
+          />
         ))}
       </ul>
     );

@@ -13,6 +13,8 @@ export class App extends Component {
     image: [],
     loading: false,
     error: null,
+    isShowModal: false,
+    selectedImage: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -26,6 +28,7 @@ export class App extends Component {
           this.setState(prevState => ({
             image: [...prevState.image, ...data.hits],
           }));
+          this.loadEnd();
         })
         .catch(error => this.setState({ error }))
         .finally(() => this.setState({ loading: false }));
@@ -34,18 +37,25 @@ export class App extends Component {
   handleSearchFormSubmit = value => {
     this.setState({ value });
   };
+  openModal = image => {
+    this.setState({ isShowModal: true, selectedImage: image });
+  };
+
+  closeModal = () => {
+    this.setState({ isShowModal: false, selectedImage: null });
+  };
 
   onLoadMore = () => {
     this.setState(prevState => ({
       page: prevState.page + 1,
     }));
   };
-  // loadEnd = () => {
-  //   this.steState(prev => ({
-  //     image: [...prev.image, ...hits],
-  //     loading: this.state.page < Math.ceil(totalHits / 12),
-  //   }));
-  // };
+  loadEnd = () => {
+    this.setState(prev => ({
+      image: [...prev.image, ...this.state.image],
+      loading: this.state.page < Math.ceil(this.state.image.totalHits / 12),
+    }));
+  };
   render() {
     return (
       <div
@@ -60,7 +70,7 @@ export class App extends Component {
         }}
       >
         <Searchbar onSubmit={this.handleSearchFormSubmit} />
-        {/* {this.state.error && } */}
+
         {this.state.loading && (
           <Audio
             height="80"
@@ -72,10 +82,18 @@ export class App extends Component {
             wrapperClass
           />
         )}
-        <ImageGallery value={this.state.value} image={this.state.image} />
-        {this.state.image && <Button onLoadMore={this.onLoadMore} />}
-        {/* if (this.state.image.hits.length === 12) */}
-        {/* <Modal image={this.state.image} /> */}
+        <ImageGallery
+          openModal={this.openModal}
+          value={this.state.value}
+          image={this.state.image}
+        />
+        {this.state.image.length >= 12 && (
+          <Button onLoadMore={this.onLoadMore} />
+        )}
+
+        {this.state.isShowModal && (
+          <Modal onClose={this.closeModal} image={this.state.selectedImage} />
+        )}
       </div>
     );
   }
