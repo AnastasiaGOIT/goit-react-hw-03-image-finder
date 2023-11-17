@@ -5,6 +5,7 @@ import { Audio } from 'react-loader-spinner';
 import { Button } from './Button/Button';
 import { api } from './services/api';
 import { Modal } from './Modal/Modal';
+// import { Loader } from './Loader/Loader';
 
 export class App extends Component {
   state = {
@@ -18,7 +19,7 @@ export class App extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { value, page, image } = this.state;
+    const { value, page } = this.state;
 
     if (prevState.value !== value || prevState.page !== page) {
       this.setState({ loading: true, image: [] });
@@ -71,17 +72,7 @@ export class App extends Component {
       >
         <Searchbar onSubmit={this.handleSearchFormSubmit} />
 
-        {this.state.loading && (
-          <Audio
-            height="80"
-            width="80"
-            radius="9"
-            color="green"
-            ariaLabel="loading"
-            wrapperStyle
-            wrapperClass
-          />
-        )}
+        {this.state.loading && <Audio />}
         <ImageGallery
           openModal={this.openModal}
           value={this.state.value}
