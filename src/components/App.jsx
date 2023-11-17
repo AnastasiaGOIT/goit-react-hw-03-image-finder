@@ -5,7 +5,6 @@ import { Audio } from 'react-loader-spinner';
 import { Button } from './Button/Button';
 import { api } from './services/api';
 import { Modal } from './Modal/Modal';
-// import { Loader } from './Loader/Loader';
 
 export class App extends Component {
   state = {
