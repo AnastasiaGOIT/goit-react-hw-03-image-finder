@@ -28,6 +28,7 @@ export class App extends Component {
           this.setState(prevState => ({
             image: [...prevState.image, ...data.hits],
           }));
+
           this.loadEnd(data.totalHits);
         })
         .catch(error => this.setState({ error }))
@@ -54,11 +55,8 @@ export class App extends Component {
   loadEnd = totalHits => {
     const perPage = 12;
     this.setState(prev => ({
-      image: [...prev.image, ...this.state.image],
       loading: this.state.page < Math.ceil(totalHits / perPage),
     }));
-    console.log('Page:', this.state.page);
-    console.log('Total Hits:', totalHits);
   };
   render() {
     return (
