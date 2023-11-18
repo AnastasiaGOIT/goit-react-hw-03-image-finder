@@ -3,7 +3,7 @@ import { Searchbar } from './Searchbar/Searchbar';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Audio } from 'react-loader-spinner';
 import { Button } from './Button/Button';
-import { api } from './services/api';
+import { api } from '../services/api';
 import { Modal } from './Modal/Modal';
 
 export class App extends Component {
@@ -21,14 +21,14 @@ export class App extends Component {
     const { value, page } = this.state;
 
     if (prevState.value !== value || prevState.page !== page) {
-      this.setState({ loading: true, image: [] });
+      this.setState({ loading: true });
       api(value, page)
         .then(data => {
           console.log(data);
           this.setState(prevState => ({
             image: [...prevState.image, ...data.hits],
           }));
-          this.loadEnd();
+          this.loadEnd(data.totalHits);
         })
         .catch(error => this.setState({ error }))
         .finally(() => this.setState({ loading: false }));
@@ -50,17 +50,25 @@ export class App extends Component {
       page: prevState.page + 1,
     }));
   };
-  loadEnd = () => {
+  loadEnd = totalHits => {
+    const perPage = 12;
     this.setState(prev => ({
       image: [...prev.image, ...this.state.image],
-      loading: this.state.page < Math.ceil(this.state.image.totalHits / 12),
+      loading: this.state.page < Math.ceil(totalHits / perPage),
     }));
+    console.log('Page:', this.state.page);
+    console.log('Total Hits:', totalHits);
+    console.log(
+      'Calculated Loading:',
+      this.state.page < Math.ceil(totalHits / perPage)
+    );
   };
   render() {
     return (
       <div
         style={{
-          height: '100vh',
+          // height: '100vh',
+          padding: '0',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
