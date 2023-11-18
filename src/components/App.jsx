@@ -36,7 +36,7 @@ export class App extends Component {
     }
   }
   handleSearchFormSubmit = value => {
-    this.setState({ value });
+    this.setState({ value, page: 1, image: [] });
   };
   openModal = image => {
     this.setState({ isShowModal: true, selectedImage: image });
@@ -57,6 +57,7 @@ export class App extends Component {
     this.setState(prev => ({
       loading: this.state.page < Math.ceil(totalHits / perPage),
     }));
+    console.log(this.state.page);
   };
   render() {
     return (
