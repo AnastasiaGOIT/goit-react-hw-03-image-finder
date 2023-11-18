@@ -50,6 +50,7 @@ export class App extends Component {
       page: prevState.page + 1,
     }));
   };
+
   loadEnd = totalHits => {
     const perPage = 12;
     this.setState(prev => ({
@@ -58,10 +59,6 @@ export class App extends Component {
     }));
     console.log('Page:', this.state.page);
     console.log('Total Hits:', totalHits);
-    console.log(
-      'Calculated Loading:',
-      this.state.page < Math.ceil(totalHits / perPage)
-    );
   };
   render() {
     return (

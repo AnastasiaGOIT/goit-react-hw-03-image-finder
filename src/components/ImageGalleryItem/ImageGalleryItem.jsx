@@ -1,19 +1,18 @@
 import { Component } from 'react';
 import css from './ImageGalleryItem.module.css';
 
-export class ImageGalleryItem extends Component {
-  handleClick = e => {
-    this.props.openModal(this.props.image);
+export const ImageGalleryItem = ({ image, openModal }) => {
+  const handleClick = e => {
+    openModal(image);
   };
-  render() {
-    return (
-      <li onClick={this.handleClick} className={css.imageGalleryItem}>
-        <img
-          className={css.imageGalleryItemImage}
-          src={this.props.image.webformatURL}
-          alt={this.props.image.tags}
-        />
-      </li>
-    );
-  }
-}
+
+  return (
+    <li onClick={handleClick} className={css.imageGalleryItem}>
+      <img
+        className={css.imageGalleryItemImage}
+        src={image.webformatURL}
+        alt={image.tags}
+      />
+    </li>
+  );
+};
