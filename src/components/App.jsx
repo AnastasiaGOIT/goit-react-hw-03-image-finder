@@ -5,16 +5,19 @@ import { Audio } from 'react-loader-spinner';
 import { Button } from './Button/Button';
 import { api } from '../services/api';
 import { Modal } from './Modal/Modal';
+import { Text } from './Text/Text';
 
 export class App extends Component {
   state = {
-    page: 1,
+    page: '',
     value: '',
     image: [],
     loading: false,
     error: null,
     isShowModal: false,
     selectedImage: null,
+    isEmpty: false,
+    isVisible: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -22,9 +25,13 @@ export class App extends Component {
 
     if (prevState.value !== value || prevState.page !== page) {
       this.setState({ loading: true });
+      if (!value) return alert('Enter something!');
       api(value, page)
         .then(data => {
           console.log(data);
+          if (data.hits.length === 0) {
+            this.setState({ isEmpty: true });
+          }
           this.setState(prevState => ({
             image: [...prevState.image, ...data.hits],
           }));
@@ -36,7 +43,11 @@ export class App extends Component {
     }
   }
   handleSearchFormSubmit = value => {
-    this.setState({ value, page: 1, image: [] });
+    if (!value) {
+      alert('Enter something!');
+      return;
+    }
+    this.setState({ value, page: 40, image: [], isEmpty: false });
   };
   openModal = image => {
     this.setState({ isShowModal: true, selectedImage: image });
@@ -55,7 +66,7 @@ export class App extends Component {
   loadEnd = totalHits => {
     const perPage = 12;
     this.setState(prev => ({
-      loading: this.state.page < Math.ceil(totalHits / perPage),
+      isVisible: this.state.page < Math.ceil(totalHits / perPage),
     }));
     console.log(this.state.page);
   };
@@ -74,6 +85,7 @@ export class App extends Component {
         }}
       >
         <Searchbar onSubmit={this.handleSearchFormSubmit} />
+        {this.state.isEmpty && <Text />}
         {/* {error && <h1>{ }</h1>} */}
         {this.state.loading && <Audio />}
         <ImageGallery
@@ -81,9 +93,7 @@ export class App extends Component {
           value={this.state.value}
           image={this.state.image}
         />
-        {this.state.image.length >= 12 && (
-          <Button onLoadMore={this.onLoadMore} />
-        )}
+        {this.state.isVisible && <Button onLoadMore={this.onLoadMore} />}
 
         {this.state.isShowModal && (
           <Modal onClose={this.closeModal} image={this.state.selectedImage} />
