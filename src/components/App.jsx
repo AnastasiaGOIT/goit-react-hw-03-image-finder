@@ -47,7 +47,7 @@ export class App extends Component {
       alert('Enter something!');
       return;
     }
-    this.setState({ value, page: 40, image: [], isEmpty: false });
+    this.setState({ value, page: 1, image: [], isEmpty: false });
   };
   openModal = image => {
     this.setState({ isShowModal: true, selectedImage: image });
